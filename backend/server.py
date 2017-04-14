@@ -22,7 +22,7 @@ def upload_file():
       subprocess.call('th eval.lua -model ../../model_id1-501-1448236541.t7_cpu.t7 -image_folder {} -num_images 1 -gpuid -1'.format(app.config['UPLOAD_FOLDER'],filename),shell=True)
       data=json.load(open('vis/vis.json','r'))
       os.remove('{}/{}'.format(app.config['UPLOAD_FOLDER'],filename))
-      return json.dumps(data[0])
+      return json.dumps(data)
 
 if __name__ == "__main__":
     app.run(host='192.168.100.12')
