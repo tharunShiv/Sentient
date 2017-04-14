@@ -2,7 +2,9 @@ from flask import Flask
 from flask import send_file
 from flask import request
 from werkzeug import secure_filename
-import os, uuid
+import os
+import subprocess
+import json
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER']='./pics'
@@ -17,7 +19,10 @@ def upload_file():
       f = request.files['file']
       filename = secure_filename(f.filename)
       f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-      return 'file uploaded successfully'
+      subprocess.call('th eval.lua -model ../../model_id1-501-1448236541.t7_cpu.t7 -image_folder {} -num_images 1 -gpuid -1'.format(app.config['UPLOAD_FOLDER'],filename),shell=True)
+      data=json.load(open('vis/vis.json','r'))
+      os.remove('{}/{}'.format(app.config['UPLOAD_FOLDER'],filename))
+      return json.dumps(data[0])
 
 if __name__ == "__main__":
-    app.run(host='192.168.100.19')
+    app.run(host='192.168.100.12')
